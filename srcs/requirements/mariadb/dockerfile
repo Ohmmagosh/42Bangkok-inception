@@ -1,0 +1,20 @@
+FROM debian:buster
+
+RUN apt update; \
+	apt install -y mariadb-server vim;
+
+COPY conf .
+COPY tools/run.sh .
+
+RUN service mysql start; \
+	chown mysql:mysql /var/run/mysqld/; \
+	chmod -R 755 /var/run/mysqld/; \
+	cat conf > /etc/mysql/mariadb.conf.d/50-server.cnf; \
+	sh ./run.sh;
+
+RUN service mysql restart
+
+EXPOSE 3306
+
+ENTRYPOINT [ "mysqld" ]
+
