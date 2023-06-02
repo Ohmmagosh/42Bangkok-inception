@@ -1,48 +1,44 @@
 version: '3.9'
 services:
   nginx:
+    image: nginx:inception
+    depends_on:
+      - wordpress
     container_name: nginx
     build: ./requirements/nginx/
     ports:
-      - "80:80"
+      - "443:443"
     volumes:
-      - wordpress:/www/
+      - wordpress:/var/www/html/wordpress/
+    networks:
+      - wordpress
   mariadb:
     build: ./requirements/mariadb/
+    image: mariadb:inception
     container_name: mariadb
-    ports:
-      - "3306:3306"
     networks:
-      - database
-    # args:
+      - wordpress
+    # args: when build
     #   - MYSQL_PASSWORD=${}
-    # environment:
+    # environment: when container run
     #   - MYSQL_ROOT_PASSWORD=$(MYSQL_ROOT_PASSWORD)
     #   - MYSQL_USER=${MYSQL_USER}
     #   - MYSQL_PASSWORD=MYSQL_PASSWORD
   wordpress:
+    image: wordpress:inception
     depends_on:
       - mariadb
     build: ./requirements/wordpress/
     container_name: wordpress
     ports:
-      - "8080:8080"
+      - "9000:9000"
     networks:
-      - database
+      - wordpress
     volumes:
       - wordpress:/var/www/html/wordpress
-  # test:
-  #   image: debian
-  #   container_name: test
-  #   command: sleep infinity
-  #   ports:
-  #     - "8081:8081"
-  #   networks:
-  #     - database
 
 networks:
-  database:
-    name: database
+  wordpress:
 
 volumes:
   wordpress:
@@ -50,4 +46,4 @@ volumes:
     driver_opts:
       type: none
       o : "bind"
-      device: ${HOME}/data/
+      device: /home/psuanpro/data/

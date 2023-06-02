@@ -11,6 +11,6 @@ WORKDIR /var/www/html/wordpress/
 
 COPY ./tools/run.sh .
 
+EXPOSE 9000
 
-# CMD [ "sleep", "infinity" ]
 CMD ["bash", "run.sh"]
