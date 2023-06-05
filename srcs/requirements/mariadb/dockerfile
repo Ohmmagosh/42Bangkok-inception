@@ -3,6 +3,12 @@ FROM debian:buster
 RUN apt update; \
 	apt install -y mariadb-server vim;
 
+ARG MYSQL_ROOT_PASSWORD
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+ARG MYSQL_USER_DB
+ARG MYSQL_USER_DB_PASSWORD
+
 COPY conf .
 COPY tools/run.sh .
 

@@ -12,18 +12,28 @@ services:
       - wordpress:/var/www/html/wordpress/
     networks:
       - wordpress
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
   mariadb:
-    build: ./requirements/mariadb/
+    build:
+      context: ./requirements/mariadb/
+      args:
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_USER_DB=${MYSQL_USER_DB}
+        - MYSQL_USER_DB_PASSWORD=${MYSQL_USER_DB_PASSWORD}
     image: mariadb:inception
     container_name: mariadb
     networks:
       - wordpress
-    # args: when build
-    #   - MYSQL_PASSWORD=${}
-    # environment: when container run
-    #   - MYSQL_ROOT_PASSWORD=$(MYSQL_ROOT_PASSWORD)
-    #   - MYSQL_USER=${MYSQL_USER}
-    #   - MYSQL_PASSWORD=MYSQL_PASSWORD
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_USER_DB=${MYSQL_USER_DB}
+      - MYSQL_USER_DB_PASSWORD=${MYSQL_USER_DB_PASSWORD}
+
   wordpress:
     image: wordpress:inception
     depends_on:
@@ -36,6 +46,18 @@ services:
       - wordpress
     volumes:
       - wordpress:/var/www/html/wordpress
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_USER_DB=${MYSQL_USER_DB}
+      - MYSQL_USER_DB_PASSWORD=${MYSQL_USER_DB_PASSWORD}
+      - WORDPRESS_ADMIN=${WORDPRESS_ADMIN}
+      - WORDPRESS_ADMIN_PASSWORD=${WORDPRESS_ADMIN_PASSWORD}
+
+
+
+
 
 networks:
   wordpress:
