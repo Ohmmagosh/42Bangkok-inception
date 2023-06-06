@@ -2,6 +2,7 @@ version: '3.9'
 services:
   nginx:
     image: nginx:inception
+    restart: alway
     depends_on:
       - wordpress
     container_name: nginx
@@ -25,6 +26,7 @@ services:
         - MYSQL_USER_DB_PASSWORD=${MYSQL_USER_DB_PASSWORD}
     image: mariadb:inception
     container_name: mariadb
+    restart: alway
     networks:
       - wordpress
     environment:
@@ -36,6 +38,7 @@ services:
 
   wordpress:
     image: wordpress:inception
+    restart: alway
     depends_on:
       - mariadb
     build: ./requirements/wordpress/
